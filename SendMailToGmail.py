@@ -1,9 +1,18 @@
-for posk in posMTotals:
-            montTotal =page_content[posk+5:posk+13].strip()
-            #print(numDocuments)
-            #print(f"monto: {montTotal}")
-            #print(f"len: {len(montTotal)}")
-            #print(buscar_Indices(montTotal,"."))
-            #html="<tr><td>"+l+"</td><td>BOLETA</td><td>"+numDocuments+"</td><td> "+tipoMoneda+"</td><td>" + limpiar_Monto_Total(montTotal,".")+"</td></tr>"
-            #print(NumberDoc)
-            x="<tr><td>"+l+"</td><td>BOLETA</td><td>"+numDocuments+"</td><td> "+tipoMoneda+"</td><td>" + limpiar_Monto_Total(montTotal,".")+"</td></tr>"
+class Mensaje:
+
+    titulo="titulo mensaje"
+    isEnvidado=False
+
+    def sendMensaje(self):
+        self.isEnvidado=True
+        
+    def estado(self):
+        if(self.isEnvidado):
+            return "enviado"
+        else:
+            return "no enviado"
+
+miMensaje=Mensaje()
+
+miMensaje.sendMensaje()
+print(miMensaje.estado())

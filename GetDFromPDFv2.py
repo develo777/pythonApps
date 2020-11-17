@@ -1,7 +1,7 @@
 from funciones.mod_Content import buscar_Indices
 from GetDToExcel import GetDToExcel
 from GetDContent import GetDContent
-from GetDocument import *
+from GetDocumentv2 import *
 import sys
 import os
 import PyPDF2
