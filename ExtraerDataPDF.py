@@ -1,4 +1,18 @@
-from funciones.mod_Content import buscar_Indices
+import os
+import PyPDF2
+
+#Funcion para buscar posiciones de textoABuscar
+def buscar_Indices(contenido,textoABuscar):
+    posiciones=[]
+    length =len(contenido)
+    index=0
+    while index < length:
+        i=contenido.find(textoABuscar,index)
+        if i==-1:
+            return posiciones
+        posiciones.append(i)
+        index =i+1
+    return posiciones
 #Funcion para limpiar Monto
 def limpiar_Monto_Total(contenido,textoABuscar):
     pos=buscar_Indices(contenido,textoABuscar)
@@ -33,18 +47,12 @@ def leer_Boletas(nombre_doc,page_content):
 
     #recorrer los indices y tomar los valores
     while indice < len(numDocuments):
-        rows+=nombre_doc+'//'+numDocuments[indice]+'//'+mTotal[indice]+"*"
-        #rows.append(nombre_doc+numDocuments[indice]+mTotal[indice]+"*")
-        #rows.append(str(indice+1))
-        #rows.append()
-        #rows.append(tipoMoneda)
-        #rows.append(mTotal[indice])
+        rows+="<tr><td>"+nombre_doc+"</td><td>"+str(indice+1)+"</td><td>BOLETA</td><td>"+numDocuments[indice]+"</td><td>"+tipoMoneda+"</td><td>"+mTotal[indice]+"</td></tr>"
         indice+=1   
-    return rows    
+    return rows
 #leer facturas        
 def leer_Facturas(nombre_doc,page_content):
 
-    rows=[]
     #Numero de Factura
     posAi=page_content.find("Nro.")
     numFactura =page_content[posAi+4:posAi+16]
@@ -82,6 +90,29 @@ def leer_Facturas(nombre_doc,page_content):
     LasIndex=len(newArray)-2
     #print(LasIndex)
     Monto=newArray[LasIndex]
-    return nombre_doc+str(1)+"FACTURAS"+str(numFactura)+tipoMoneda+str(Monto)
-
+    return "<tr><td>"+nombre_doc+"</td><td>"+str(1)+"</td><td>FACTURAS</td><td>"+str(numFactura)+"</td><td>"+tipoMoneda+"</td><td>"+str(Monto)+"</td></tr>"
 #crear documento html
+def crear_Html(html_content):
+    archivo=open("Documentos.html","w")
+    headerHtml="<!DOCTYPE html><html><head><mETA charset='utf-8' /><title>documento generedo</title></head><body><table>"
+    fotterHtml="</body></html>"
+    archivo.write(headerHtml+html_content+fotterHtml)
+    archivo.close()
+
+path="pdfs/" #ruta 
+documents= os.listdir(path) #documentos
+body=""
+for l in documents: #numeros de documentos
+    pdfFileObject = open(path+l, 'rb')
+    if not l.startswith('.'):#no considerar archivos que empiezen con . para mac
+        pdfReader = PyPDF2.PdfFileReader(pdfFileObject)
+        count = pdfReader.numPages #numero de paginas por documento
+        for i in range(count):#nrango de umero de paginas 
+            page = pdfReader.getPage(i)
+            page_content = page.extractText() #extraer contenido
+            tipoDocument = buscar_Indices(page_content,"FACTURA") #identificar el tipo de documento
+            if len(tipoDocument)==0:
+                body+=leer_Boletas(l,page_content)
+            else:
+                body+=leer_Facturas(l,page_content)
+crear_Html(body)#crear documento html

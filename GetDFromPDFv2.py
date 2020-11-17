@@ -9,6 +9,9 @@ import PyPDF2
 #ruta 
 path="pdfs/" 
 body=""
+listita=[]
+newlist=[]
+listota=[]
 #Lista de docs
 documents=[]
 hayData=False
@@ -35,7 +38,7 @@ except:
 
 if len(documents)!=0:
     #numeros de documentos
-    '''
+    
     for l in documents:
         pdfFileObject = open(path+l, 'rb')
         ##no considerar archivos que empiezen con . para mac
@@ -50,30 +53,35 @@ if len(documents)!=0:
                 ##identificar el tipo de documento
                 tipoDocument = buscar_Indices(page_content,"FACTURA") 
                 if len(tipoDocument)==0:          
-                    #body+=leer_Boletas(l,page_content)
+                    #body.append(leer_Boletas(l,page_content))
+                    body+=leer_Boletas(l,page_content)
                 else:
-                    #body+=leer_Facturas(l,page_content)
-    '''
+                    #body.append(leer_Facturas(l,page_content))
+                    body+=leer_Facturas(l,page_content)
     
-    MyDataToExcel = GetDToExcel('ReporteMesJulio')
+    #print(body)
+    newlist=body.split('*')
+    for i in newlist:
+        for k in i.split('//'):
+            listita.append(k)
+        listota.append(listita)
 
-    item = []
-    item.append("abc")
-    item.append("lila")
-    item.append("ProductoA")
-    item.append("A")
-    item.append("papa")
+        #newlist.append(i.split('*'))
+    #MyDataToExcel = GetDToExcel('ReporteMesJulio')
 
-    #print(item)
-    for fila in [['abc', 'lila'], ['Geeks','azuk']]:
-        print(fila)
-        Contentx=GetDContent(fila)
-        MyDataToExcel.addContents(Contentx)
-    MyDataToExcel.saveFile("ReporteDocumentos.xls")
-    #crear documento html
-    #if (crear_Html(body))!=0:
-    #    print("No se puedo crear el documento")
-    #else:
-    #    print("Archivo generado correctamente!")
+    #item = []
+    #item.append("abc")
+    #item.append("lila")
+    #item.append("ProductoA")
+    #item.append("A")
+    #item.append("papa")
+
+    print(listota)
+    #for fila in body:
+    #   print(fila)
+       #Contentx=GetDContent(fila)
+       #MyDataToExcel.addContents(Contentx)
+    #MyDataToExcel.saveFile("ReporteDocumentos.xls")
+
 else:
     print("No hay documentos a recuperar")
