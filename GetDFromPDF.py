@@ -9,6 +9,9 @@ import PyPDF2
 #ruta 
 path="pdfs/" 
 body=""
+listita=[]
+newlist=[]
+listota=[]
 #Lista de docs
 documents=[]
 hayData=False
@@ -35,7 +38,6 @@ except:
 
 if len(documents)!=0:
     #numeros de documentos
-    '''
     for l in documents:
         pdfFileObject = open(path+l, 'rb')
         ##no considerar archivos que empiezen con . para mac
@@ -50,30 +52,36 @@ if len(documents)!=0:
                 ##identificar el tipo de documento
                 tipoDocument = buscar_Indices(page_content,"FACTURA") 
                 if len(tipoDocument)==0:          
-                    #body+=leer_Boletas(l,page_content)
+                    #body.append(leer_Boletas(l,page_content))
+                    body+=leer_Boletas(l,page_content)
                 else:
-                    #body+=leer_Facturas(l,page_content)
-    '''
+                    #body.append(leer_Facturas(l,page_content))
+                    body+=leer_Facturas(l,page_content)
     
-    MyDataToExcel = GetDToExcel('ReporteMesJulio')
+    #print(body)
+    newlist=body.split('*')
+    newlist.pop(len(newlist)-1)
+    #print(newlist)
+    for j in newlist:
+        sublist=[]
+        for k in j.split('//'):
+            sublist.append(k)
+        listota.append(sublist)
 
-    item = []
-    item.append("abc")
-    item.append("lila")
-    item.append("ProductoA")
-    item.append("A")
-    item.append("papa")
+    MyDataToExcel = GetDToExcel('ReporteMensual')
 
-    #print(item)
-    for fila in [['abc', 'lila'], ['Geeks','azuk']]:
-        print(fila)
-        Contentx=GetDContent(fila)
-        MyDataToExcel.addContents(Contentx)
+    #item = []
+    #item.append("abc")
+    #item.append("lila")
+    #item.append("ProductoA")
+    #item.append("A")
+    #item.append("papa")
+
+    #print(listota)
+    for fila in listota:
+       Contentx=GetDContent(fila)
+       MyDataToExcel.addContents(Contentx)
     MyDataToExcel.saveFile("ReporteDocumentos.xls")
-    #crear documento html
-    #if (crear_Html(body))!=0:
-    #    print("No se puedo crear el documento")
-    #else:
-    #    print("Archivo generado correctamente!")
+
 else:
     print("No hay documentos a recuperar")

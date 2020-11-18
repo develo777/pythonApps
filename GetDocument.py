@@ -33,12 +33,18 @@ def leer_Boletas(nombre_doc,page_content):
 
     #recorrer los indices y tomar los valores
     while indice < len(numDocuments):
-        rows+="<tr><td>"+nombre_doc+"</td><td>"+str(indice+1)+"</td><td>BOLETA</td><td>"+numDocuments[indice]+"</td><td>"+tipoMoneda+"</td><td>"+mTotal[indice]+"</td></tr>"
+        rows+=str(1)+'//'+nombre_doc+'//'+str(indice)+'//'+'BOLETAS'+'//'+numDocuments[indice]+'//'+tipoMoneda+'//'+mTotal[indice]+'*'
+        #rows.append(nombre_doc+numDocuments[indice]+mTotal[indice]+"*")
+        #rows.append(str(indice+1))
+        #rows.append()
+        #rows.append(tipoMoneda)
+        #rows.append(mTotal[indice])
         indice+=1   
     return rows    
 #leer facturas        
 def leer_Facturas(nombre_doc,page_content):
 
+    rows=[]
     #Numero de Factura
     posAi=page_content.find("Nro.")
     numFactura =page_content[posAi+4:posAi+16]
@@ -76,5 +82,7 @@ def leer_Facturas(nombre_doc,page_content):
     LasIndex=len(newArray)-2
     #print(LasIndex)
     Monto=newArray[LasIndex]
-    return "<tr><td>"+nombre_doc+"</td><td>"+str(1)+"</td><td>FACTURAS</td><td>"+str(numFactura)+"</td><td>"+tipoMoneda+"</td><td>"+str(Monto)+"</td></tr>"
+    #return nombre_doc+str(1)+'//'+'FACTURAS'+'//'+str(numFactura)+'//'+tipoMoneda+'//'+str(Monto)+'*'
+    return str(1)+'//'+nombre_doc+'//'+str(1)+'//'+'FACTURAS'+'//'+str(numFactura)+'//'+tipoMoneda+'//'+str(Monto)+'*'
+
 #crear documento html

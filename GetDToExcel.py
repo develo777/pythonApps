@@ -14,7 +14,7 @@ class GetDToExcel:
                     "Indice",
                     "Archivo",
                     "N",
-                    "Tipo"
+                    "Tipo",
                     "Documento",
                     "Moneda",
                     "ImporteTotal"
@@ -29,6 +29,11 @@ class GetDToExcel:
     def addContents(self,item):
         self.ws.write(self.row,0,item.Indice)
         self.ws.write(self.row,1,item.Archivo)
+        self.ws.write(self.row,2,item.N)
+        self.ws.write(self.row,3,item.Tipo)
+        self.ws.write(self.row,4,item.Documento)
+        self.ws.write(self.row,5,item.Moneda)
+        self.ws.write(self.row,6,item.ImporteTotal)
         self.row=self.row+1
     def saveFile(self,fileName):
         self.wb.save(fileName)
