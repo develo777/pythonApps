@@ -2,43 +2,22 @@ from funciones.mod_Content import buscar_Indices
 from GetDToExcel import GetDToExcel
 from GetDContent import GetDContent
 from GetDocument import *
-import sys
-import os
+import sys, os
 import PyPDF2
 
 #ruta 
 path="pdfs/" 
-body=""
-listita=[]
-newlist=[]
-listota=[]
-#Lista de docs
+content=""
 documents=[]
-hayData=False
-
-# crear documento html
-def crear_Html(html_content):
-    value = -1
-    try:
-        archivo=open("Documentos.html","w")
-        headerHtml="<!DOCTYPE html><html><head><mETA charset='utf-8' /><title>documento generedo</title></head><body><table>"
-        fotterHtml="</body></html>"
-        archivo.write(headerHtml+html_content+fotterHtml)
-        archivo.close()
-        value =0
-    except:
-        print("error al generar documento html")
-    return value 
-        
 
 try:
-    documents= os.listdir(path) #documentos
+    documentsPDF= os.listdir(path) #documentos
 except:
     print("No se puedo encontrar el directorio o archivo")
 
-if len(documents)!=0:
+if len(documentsPDF)!=0:
     #numeros de documentos
-    for l in documents:
+    for l in documentsPDF:
         pdfFileObject = open(path+l, 'rb')
         ##no considerar archivos que empiezen con . para mac
         if not l.startswith('.'):
@@ -52,35 +31,27 @@ if len(documents)!=0:
                 ##identificar el tipo de documento
                 tipoDocument = buscar_Indices(page_content,"FACTURA") 
                 if len(tipoDocument)==0:          
-                    #body.append(leer_Boletas(l,page_content))
-                    body+=leer_Boletas(l,page_content)
+                    content+=leer_Boletas(l,page_content)
                 else:
-                    #body.append(leer_Facturas(l,page_content))
-                    body+=leer_Facturas(l,page_content)
+                    content+=leer_Facturas(l,page_content)
     
-    #print(body)
-    newlist=body.split('*')
-    newlist.pop(len(newlist)-1)
-    #print(newlist)
-    for j in newlist:
+
+    contentDocumentos=content.split('*')
+    contentDocumentos.pop(len(contentDocumentos)-1)
+
+    for j in contentDocumentos:
         sublist=[]
         for k in j.split('//'):
             sublist.append(k)
-        listota.append(sublist)
-
+        documents.append(sublist)
+    
+    #Asignar Nombre a la hoja
     MyDataToExcel = GetDToExcel('ReporteMensual')
-
-    #item = []
-    #item.append("abc")
-    #item.append("lila")
-    #item.append("ProductoA")
-    #item.append("A")
-    #item.append("papa")
-
-    #print(listota)
-    for fila in listota:
-       Contentx=GetDContent(fila)
-       MyDataToExcel.addContents(Contentx)
+    #Generar documento en formato xls
+    for document in documents:
+       objDocumento=GetDContent(document)
+       MyDataToExcel.addContents(objDocumento)
+    #Generar documento xls
     MyDataToExcel.saveFile("ReporteDocumentos.xls")
 
 else:
