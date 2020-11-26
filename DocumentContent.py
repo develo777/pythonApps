@@ -1,5 +1,5 @@
 
-class GetDContent(object):
+class DocumentContent(object):
 
     def __init__(self,lista):
         self.Indice=lista[0]

@@ -1,18 +1,4 @@
-import os
-import PyPDF2
-
-#Funcion para buscar posiciones de textoABuscar
-def buscar_Indices(contenido,textoABuscar):
-    posiciones=[]
-    length =len(contenido)
-    index=0
-    while index < length:
-        i=contenido.find(textoABuscar,index)
-        if i==-1:
-            return posiciones
-        posiciones.append(i)
-        index =i+1
-    return posiciones
+from funciones.UtilString import buscar_Indices
 #Funcion para limpiar Monto
 def limpiar_Monto_Total(contenido,textoABuscar):
     pos=buscar_Indices(contenido,textoABuscar)
@@ -47,9 +33,9 @@ def leer_Boletas(nombre_doc,page_content):
 
     #recorrer los indices y tomar los valores
     while indice < len(numDocuments):
-        rows+="<tr><td>"+nombre_doc+"</td><td>"+str(indice+1)+"</td><td>BOLETA</td><td>"+numDocuments[indice]+"</td><td>"+tipoMoneda+"</td><td>"+mTotal[indice]+"</td></tr>"
+        rows+=str(1)+'//'+nombre_doc+'//'+str(indice)+'//'+'BOLETAS'+'//'+numDocuments[indice]+'//'+tipoMoneda+'//'+mTotal[indice]+'*'
         indice+=1   
-    return rows
+    return rows    
 #leer facturas        
 def leer_Facturas(nombre_doc,page_content):
 
@@ -63,21 +49,19 @@ def leer_Facturas(nombre_doc,page_content):
         tipoMoneda=tipoMoneda
     else:
         tipoMoneda="USD"
+    
     #MontoTotal
     posMontoTotal=page_content.find("Importe")
     montoTotal =page_content[posMontoTotal-50:posMontoTotal]
     montoTotalx=buscar_Indices(montoTotal,".")
-    #print(montoTotal)
-    #print(montoTotalx)
     countA=len(montoTotalx)
-    #print(mt)
+    #Tomar las ultimas posiciones la antepenultima y la ultima  
     lastpos=montoTotalx[countA-1]
     antpos=montoTotalx[countA-2]
-    #print(antpos)
-    #print(lastpos)
+
     busant1=montoTotal[antpos:antpos+3]
     busant2=montoTotal[lastpos:lastpos+3]
-
+    #Si hay coincidencia entre los numeros realizar un replazo por cada numeros
     if busant1==busant2:
         search_t=montoTotal.replace(str(busant1), str(busant1)+"/")
     else:
@@ -85,34 +69,19 @@ def leer_Facturas(nombre_doc,page_content):
         search_t=search_t.replace(str(busant2), str(busant2)+"/")
     
     newArray=search_t.split('/')
-    #print(newArray)
-    #print(len(newArray))
     LasIndex=len(newArray)-2
-    #print(LasIndex)
     Monto=newArray[LasIndex]
-    return "<tr><td>"+nombre_doc+"</td><td>"+str(1)+"</td><td>FACTURAS</td><td>"+str(numFactura)+"</td><td>"+tipoMoneda+"</td><td>"+str(Monto)+"</td></tr>"
-#crear documento html
+    return str(1)+'//'+nombre_doc+'//'+str(1)+'//'+'FACTURAS'+'//'+str(numFactura)+'//'+tipoMoneda+'//'+str(Monto)+'*'
+# crear documento html
 def crear_Html(html_content):
-    archivo=open("Documentos.html","w")
-    headerHtml="<!DOCTYPE html><html><head><mETA charset='utf-8' /><title>documento generedo</title></head><body><table>"
-    fotterHtml="</body></html>"
-    archivo.write(headerHtml+html_content+fotterHtml)
-    archivo.close()
-
-path="pdfs/" #ruta 
-documents= os.listdir(path) #documentos
-body=""
-for l in documents: #numeros de documentos
-    pdfFileObject = open(path+l, 'rb')
-    if not l.startswith('.'):#no considerar archivos que empiezen con . para mac
-        pdfReader = PyPDF2.PdfFileReader(pdfFileObject)
-        count = pdfReader.numPages #numero de paginas por documento
-        for i in range(count):#nrango de umero de paginas 
-            page = pdfReader.getPage(i)
-            page_content = page.extractText() #extraer contenido
-            tipoDocument = buscar_Indices(page_content,"FACTURA") #identificar el tipo de documento
-            if len(tipoDocument)==0:
-                body+=leer_Boletas(l,page_content)
-            else:
-                body+=leer_Facturas(l,page_content)
-crear_Html(body)#crear documento html
+    value = -1
+    try:
+        archivo=open("Documentos.html","w")
+        headerHtml="<!DOCTYPE html><html><head><mETA charset='utf-8' /><title>documento generedo</title></head><body><table>"
+        fotterHtml="</body></html>"
+        archivo.write(headerHtml+html_content+fotterHtml)
+        archivo.close()
+        value =0
+    except:
+        print("error al generar documento html")
+    return value 

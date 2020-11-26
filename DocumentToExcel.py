@@ -1,6 +1,6 @@
 import xlwt
 
-class GetDToExcel:
+class DocumentToExcel:
 
     def __init__(self,name):
 

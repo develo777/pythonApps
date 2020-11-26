@@ -1,7 +1,7 @@
-from funciones.mod_Content import buscar_Indices
+from funciones.UtilString import buscar_Indices
 from GetDToExcel import GetDToExcel
-from GetDContent import GetDContent
-from GetDocument import *
+from DocumentContent import DocumentContent
+from DocumentFunc import *
 import sys, os
 import PyPDF2
 
@@ -49,7 +49,7 @@ if len(documentsPDF)!=0:
     MyDataToExcel = GetDToExcel('ReporteMensual')
     #Generar documento en formato xls
     for document in documents:
-       objDocumento=GetDContent(document)
+       objDocumento=DocumentContent(document)
        MyDataToExcel.addContents(objDocumento)
     #Generar documento xls
     MyDataToExcel.saveFile("ReporteDocumentos.xls")

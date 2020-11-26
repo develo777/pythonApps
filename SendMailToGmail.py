@@ -1,5 +1,7 @@
 class Mensaje:
 
+    #working..
+
     titulo="titulo mensaje"
     isEnvidado=False
 
