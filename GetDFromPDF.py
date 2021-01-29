@@ -1,7 +1,7 @@
 from funciones.mod_Content import buscar_Indices
 from GetDToExcel import GetDToExcel
 from GetDContent import GetDContent
-from GetDocument import *
+from GetDocument import leer_Boletas,leer_Facturas
 import sys, os
 import PyPDF2
 
@@ -45,7 +45,7 @@ if len(documentsPDF)!=0:
             sublist.append(k)
         documents.append(sublist)
     
-    #Asignar Nombre a la hoja
+    #Asignar Nombre a la hoja Excel
     MyDataToExcel = GetDToExcel('ReporteMensual')
     #Generar documento en formato xls
     for document in documents:
