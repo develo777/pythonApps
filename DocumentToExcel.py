@@ -4,9 +4,9 @@ class DocumentToExcel:
 
     def __init__(self,name):
 
-        #agrego una instancia
+        #Agregar una instancia
         self.wb=xlwt.Workbook()
-        #agregar una hoja
+        #Agregar  hoja
         self.ws=self.wb.add_sheet(name,cell_overwrite_ok=True)
 
         #definimos nombre de columnas 
@@ -20,12 +20,13 @@ class DocumentToExcel:
                     "ImporteTotal"
                     ]
         col=0
-        #escribimos las columnas en la hoja
+        #Escribir las columnas en la hoja
         for columna in columnas:
             self.ws.write(0,col,columna)
             col=col+1
         
         self.row=1
+
     def addContents(self,item):
         self.ws.write(self.row,0,item.Indice)
         self.ws.write(self.row,1,item.Archivo)
@@ -35,6 +36,7 @@ class DocumentToExcel:
         self.ws.write(self.row,5,item.Moneda)
         self.ws.write(self.row,6,item.ImporteTotal)
         self.row=self.row+1
+
     def saveFile(self,fileName):
         self.wb.save(fileName)
         print("Documento Excel generado!")
