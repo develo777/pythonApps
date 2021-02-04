@@ -4,64 +4,79 @@ import pygame
 from pygame.locals import *
 import time
 
-class Snake:
-    #### constructor
+
+### color
+GREEN = (0, 255, 0)
+DARK_GRAY = (32, 32, 32)
+
+### speep
+SPEED = 10
+
+
+SIZE=30
+
+###parameters
+backgroundcolor = (DARK_GRAY)
+screen_width = 600
+screen_height = 400
+
+
+class Heart:
     def __init__(self,parent_screen):
-        self.parent_screen=parent_screen
-        ####load character ball
-        self.ball=pygame.image.load("intro_ball.gif").convert() 
-        self._x=2
-        self._y=2
-    
+        pass
+      
     def draw(self):
-        #borramos y pintamos 
-        self.parent_screen.fill((0,0,0)) 
-        ### dibujar el snake en la window
-        self.parent_screen.blit(self.ball,(self._x,self._y))
-        ### update screen
-        pygame.display.flip() 
-    
+        pass
+      
+class Snake:
+
+    #### constructor
+    def __init__(self,parent_screen,length):
+        pass
+
+    def draw(self):
+        pass
+       
+    def walk(self):
+        pass
 
     #### move left 
     def move_left(self):
-        self._x-=10
-        self.draw()
+        pass
+    
     #### move right 
     def move_right(self):
-        self._x+=10
-        self.draw()
+        pass
+      
     #### move up 
     def move_up(self):
-        self._y-=10
-        self.draw()    
+        pass
+     
     #### move down 
     def move_down(self):
-        self._y+=10
-        self.draw()  
-        
+        pass
+       
+       
 class Game:
 
     #### constructor
     def __init__(self):
-        #### initialize all imported pygame modules ####
-        pygame.init()
-        #### Create a window ####
-        self.mwindow=pygame.display.set_mode((500,500))
-        #### title
-        pygame.display.set_caption("my first Game!")
-        #### background-color ####
-        self.mwindow.fill((0,0,0))
-
-        #### create a instance o objet (snake)
-        self.Snake=Snake(self.mwindow)
-        self.Snake.draw()
-
+        win = pygame.display.set_mode(screen_width,screen_height)
+        pass
+       
     #### finish window                                                                                                                          
     def finish(self):
-        pygame.quit()
-        sys.exit()
+        pass
+      
+    ### display title
+    def display_title(self):
+        pass
+       
+    #### play
+    def play(self):
+        pass
 
-
+    #### run game
     def run(self):
 
         running =True
@@ -90,10 +105,8 @@ class Game:
                     running=False
                     self.finish()
 
-
-
-# Main process
-#------------------------
+            
+#### Main process
 if __name__=="__main__":
     mygame = Game()
     mygame.run()
