@@ -5,7 +5,7 @@ from pygame.locals import *
 import time
 import random
 
-#### color
+#### Color
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARK = (0, 0, 0)
@@ -19,9 +19,8 @@ SIZE=20
 ####  CONFIGURATIONS
 title_window="My first Game!"
 
-
 ### TITLE
-title_game="Wherever you go GOD is with you!"
+title_game="Wherever you, go GOD is with you!"
 title_size=40
 title_x=45 
 title_y=180
@@ -35,26 +34,14 @@ backgroundcolor = (DARK_GRAY)
 screen_width = 600
 screen_height = 400
 
-class corazon(pygame.sprite.Sprite):
+
+class apple(pygame.sprite.Sprite):
     def __init__(self,pos_x,pos_y):
         super().__init__()
         self.image=pygame.image.load("Apple.png").convert_alpha()
         self.rect=self.image.get_rect()
         self.rect.x=pos_x
         self.rect.y=pos_y
-        
-
-class Heart:
-    def __init__(self,parent_screen):
-        self.parent_screen=parent_screen
-        self.heart=pygame.image.load("Apple.png").convert_alpha()
-        self._x=300
-        self._y=376
-    
-    def draw(self):
-        self.parent_screen.blit(self.heart,(self._x,self._y))
-
-
 
 class Snake(pygame.sprite.Sprite):
     #### constructor
@@ -68,20 +55,12 @@ class Snake(pygame.sprite.Sprite):
         self.rect.x=0
         self.rect.y=0
 
-    #### draw
-    #def draw(self):
-
-    #    for i in range(self.length):
-            ### draw  snake on the window
-    #        self.parent_screen.blit(self.snake,(self.rect._x[i],self.rect._y[i]))
-        ### update screen
-    #    pygame.display.flip() 
     #### walk
     def walk(self):
 
-        #or i in range(self.length-1,0,-1):
-           # self.rect.x[i]=self.rect.x[i-1]
-           # self.rect.y[i]=self.rect.y[i-1]
+        #for i in range(self.length-1,3):
+            #self.rect.x[i]=self.rect.x[i-1]
+            #self.rect.y[i]=self.rect.y[i-1]
 
         if self.direction=='left' and self.rect.x>1 :
             self.rect.x-=SIZE
@@ -92,7 +71,7 @@ class Snake(pygame.sprite.Sprite):
         if self.direction=='down'  and self.rect.y< screen_height-SIZE:
             self.rect.y+=SIZE
 
-        #self.draw()
+        
     #### move left 
     def move_left(self):
         self.direction='left'
@@ -122,20 +101,18 @@ class Game:
         #### creating a clock object
         self.clock = pygame.time.Clock()
         
-        ### grupo corazones
-        self.list_corazones =pygame.sprite.Group()
+        #### grupo apples
+        self.list_apple =pygame.sprite.Group()
 
         #### create a instance o objet snake
         self.mySnake=Snake(2)
-        
-        #### create a hearth
-        #self.myheart=Heart(self.surface)
-        #self.myheart.draw()
+        self.xplayer = pygame.sprite.RenderPlain(self.mySnake)
 
-        ### create targets
-        for i in range(7):
-           mycorazon=corazon(random.randrange(0,screen_width),random.randrange(0,screen_height))
-           self.list_corazones.add(mycorazon)
+        #### create appless
+        for x in range(1,15,1):
+            for y in range(1,20,1):
+                myapples=apple(300+x*20,20*y)
+                self.list_apple.add(myapples)
 
     #### finish window                                                                                                                          
     def finish(self):
@@ -163,10 +140,10 @@ class Game:
         self.myText = self.myFont.render(title_game,1,title_color)
         self.surface.blit(self.myText,(title_x,title_y))
 
-    #### display objetos
-    def display_objetos(self):
-        self.mySnake.draw(self.surface)
-        self.list_corazones.draw(self.surface)
+    #### display characters
+    def display_characters(self):
+        self.xplayer.draw(self.surface)
+        self.list_apple.draw(self.surface)
 
     #### play
     def play(self):
@@ -174,17 +151,13 @@ class Game:
         #clear and painting
         self.surface.fill(backgroundcolor)
         self.display_workarea()
-        
-        self.mySnake.walk()
         self.display_title()
-        self.display_objetos()
+        self.mySnake.walk()
+        self.display_characters()
 
-        #corazonescol =pygame.sprite.spritecollide(self.Snake,self.list_corazones,True)
-
-
+        ### collision
+        iscolision =pygame.sprite.spritecollide(self.mySnake,self.list_apple,True)
     
-    ### collision
-
 
     #### run game
     def run(self):
@@ -222,6 +195,7 @@ class Game:
             
             #### Will ensure our game runs at 10 FPS
             self.clock.tick(SPEED)
+
             self.play()
             
             #### This will refresh our screen 

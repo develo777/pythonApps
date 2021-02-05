@@ -9,7 +9,7 @@ class Snake:
     def __init__(self,parent_screen):
         self.parent_screen=parent_screen
         ####load character ball
-        self.ball=pygame.image.load("intro_ball.gif").convert() 
+        self.ball=pygame.image.load("Apple.png").convert() 
         self._x=2
         self._y=2
     
