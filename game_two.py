@@ -38,7 +38,7 @@ screen_height = 400
 class corazon(pygame.sprite.Sprite):
     def __init__(self,pos_x,pos_y):
         super().__init__()
-        self.image=pygame.image.load("Apple.png").convert_alpha()
+        self.image=pygame.image.load("images/Apple.png").convert_alpha()
         self.rect=self.image.get_rect()
         self.rect.x=pos_x
         self.rect.y=pos_y
@@ -47,7 +47,7 @@ class corazon(pygame.sprite.Sprite):
 class Heart:
     def __init__(self,parent_screen):
         self.parent_screen=parent_screen
-        self.heart=pygame.image.load("Apple.png").convert_alpha()
+        self.heart=pygame.image.load("images/Apple.png").convert_alpha()
         self._x=300
         self._y=376
     
@@ -62,7 +62,7 @@ class Snake:
         self.length=length
         self.parent_screen=parent_screen
         #### load character 
-        self.snake=pygame.image.load("snake.jpg").convert() 
+        self.snake=pygame.image.load("images/snake.jpg").convert() 
         self.direction ='down'
         self._x=[SIZE] * length
         self._y=[SIZE] * length
@@ -159,7 +159,7 @@ class Game:
 
     #### display title
     def display_title(self):
-        self.myFont = pygame.font.Font("Myrlissa.otf",title_size)
+        self.myFont = pygame.font.Font("font/Myrlissa.otf",title_size)
         self.myText = self.myFont.render(title_game,1,title_color)
         self.surface.blit(self.myText,(title_x,title_y))
 

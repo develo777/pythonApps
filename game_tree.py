@@ -5,21 +5,26 @@ from pygame.locals import *
 import time
 import random
 
-#### Color
+#### COLOR 
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARK = (0, 0, 0)
 DARK_GRAY = (32, 32, 32)
 WHITE = (255, 255, 255)
+
 #### speep 10 FPS
-SPEED = 20
-DELAY=60
+SPEED = 18
+DELAY=30
+TIME_FINISH = 10
+
+
 SIZE=20
 
-####  CONFIGURATIONS
+####  CONFIGURATIONS OF THE GAME
+
 title_window="My first Game!"
 
-### TITLE
+### message
 title_game="Wherever you, go GOD is with you!"
 title_size=40
 title_x=45 
@@ -29,27 +34,41 @@ title_color=WHITE
 #### COLOR GRID
 color_grid=GREEN
 
-### CANVAS WINDOWS
+###  COLOR WINDOW MAIN 
 backgroundcolor = (DARK_GRAY)
 screen_width = 600
 screen_height = 400
 
+###  COLOR GAME OVER 
+screen_width = 600
+screen_height = 400
 
+
+####score
+class Texto(pygame.sprite.Sprite):
+    def __init__(self,size):
+        super().__init__()
+        self.myfont=pygame.font.Font("font/Game_over.ttf",size)
+
+    def set(self,text):
+        self.image=self.myfont.render(text,1,WHITE)
+        self.rect = self.image.get_rect()      
+####apple
 class apple(pygame.sprite.Sprite):
     def __init__(self,pos_x,pos_y):
         super().__init__()
-        self.image=pygame.image.load("Apple.png").convert_alpha()
+        self.image=pygame.image.load("images/Apple.png").convert_alpha()
         self.rect=self.image.get_rect()
         self.rect.x=pos_x
         self.rect.y=pos_y
-
+####snake
 class Snake(pygame.sprite.Sprite):
     #### constructor
     def __init__(self,length):
         super().__init__()
         #### load character
         self.length=length 
-        self.image=pygame.image.load("snake.jpg").convert() 
+        self.image=pygame.image.load("images/snake.jpg").convert() 
         self.rect = self.image.get_rect()
         self.direction ='down'
         self.rect.x=0
@@ -84,15 +103,20 @@ class Snake(pygame.sprite.Sprite):
     #### move down 
     def move_down(self):
         self.direction='down'     
-
+####game
 class Game:
 
     #### constructor
     def __init__(self):
-        #### initialize all imported pygame modules ####
+        #### initialize all imported pygame modules 
         pygame.init()
 
-        #### create a window ####
+        #### score initializar
+        self.score=0
+        self.time_down=TIME_FINISH
+        self.aux=1
+
+        #### create a window 
         self.surface=pygame.display.set_mode((screen_width,screen_height))
 
         #### title
@@ -101,17 +125,24 @@ class Game:
         #### creating a clock object
         self.clock = pygame.time.Clock()
         
+        ###current time
+        current_time=0
+
         #### grupo apples
         self.list_apple =pygame.sprite.Group()
-
+        
+        #### create my labels Score /Timeove
+        self.myScore=Texto(50)
+        self.myTime=Texto(50)
+        
         #### create a instance o objet snake
         self.mySnake=Snake(2)
-        self.xplayer = pygame.sprite.RenderPlain(self.mySnake)
+        self.xplayer=pygame.sprite.RenderPlain(self.mySnake)
 
         #### create appless
-        for x in range(1,15,1):
-            for y in range(1,20,1):
-                myapples=apple(300+x*20,20*y)
+        for x in range(1,14,1):
+            for y in range(1,19,1):
+                myapples=apple(302+x*20,20*y)
                 self.list_apple.add(myapples)
 
     #### finish window                                                                                                                          
@@ -120,7 +151,7 @@ class Game:
         sys.exit()
 
     #### display grid
-    def display_workarea(self):
+    def display_grid(self):
         rows =20
         w=screen_width
         h=screen_height
@@ -135,11 +166,21 @@ class Game:
             pygame.draw.line(self.surface,color_grid,(300,y),(w,y))
 
     #### display title
-    def display_title(self):
-        self.myFont = pygame.font.Font("Myrlissa.otf",title_size)
-        self.myText = self.myFont.render(title_game,1,title_color)
-        self.surface.blit(self.myText,(title_x,title_y))
+    def display_score(self):
+        self.myScore.set("SCORE :"+" "+str(self.score))
+        self.surface.blit(self.myScore.image,(14,14))
 
+    #### display time   
+    def display_time(self):
+        self.myTime.set("TIME:" +" "+ str(self.time_down))
+        self.surface.blit(self.myTime.image,(215,14))
+
+    ###$ time left
+    def time_left(self,segundos):
+            if self.aux==segundos:
+                self.aux+=1
+                self.time_down-=1
+                
     #### display characters
     def display_characters(self):
         self.xplayer.draw(self.surface)
@@ -147,28 +188,57 @@ class Game:
 
     #### play
     def play(self):
-      
+
         #clear and painting
         self.surface.fill(backgroundcolor)
-        self.display_workarea()
-        self.display_title()
+        self.display_grid()
         self.mySnake.walk()
         self.display_characters()
+        self.display_score()
+        self.display_time()
 
         ### collision
         iscolision =pygame.sprite.spritecollide(self.mySnake,self.list_apple,True)
-    
+
+        if(iscolision):
+            self.score +=1
+        
+        if (self.time_down==0):
+            raise "Game over"
+
+    #### game over
+    def show_game_over(self):
+        self.pause=False
+        self.surface.fill(DARK)
+
+        self.myTextgo=Texto(60)
+        self.myTextmsg=Texto(30)
+
+        self.myTextgo.set("GAME OVER!")
+
+        gowhith =self.myTextgo.image.get_width()/2
+        goheight=self.myTextgo.image.get_height()/2
+        
+        self.myTextmsg.set("PRESS SCAPE TO <<EXIT>>")
+
+        msgwith =self.myTextmsg.image.get_width()/2
+        msgheight  =self.myTextmsg.image.get_height()/2
+
+        
+        self.surface.blit(self.myTextgo.image,( (screen_width/2)- gowhith,(screen_height/2)-goheight))
+        self.surface.blit(self.myTextmsg.image,( (screen_width/2)- msgwith,(screen_height/2)+goheight))
 
     #### run game
     def run(self):
 
         running =True
+        self.pause =True
 
         # STARTING MAIN LOOP
         while running:
 
-            #### This will delay the game so it doesn't run too quickly
-            pygame.time.delay(DELAY)
+            current_time=pygame.time.get_ticks()
+            seconds=int(current_time/1000)
 
             #### get list events
             for event in pygame.event.get():
@@ -180,26 +250,36 @@ class Game:
                         self.finish()
 
                     #### moventes by key left top up down
-                    if event.key==K_UP:
-                        self.mySnake.move_up()
-                    if event.key==K_DOWN:
-                        self.mySnake.move_down()
-                    if event.key==K_LEFT:
-                        self.mySnake.move_left()
-                    if event.key==K_RIGHT:
-                        self.mySnake.move_right()
+                    if  self.pause:
+                        if event.key==K_UP:
+                            self.mySnake.move_up()
+                        if event.key==K_DOWN:
+                            self.mySnake.move_down()
+                        if event.key==K_LEFT:
+                            self.mySnake.move_left()
+                        if event.key==K_RIGHT:
+                            self.mySnake.move_right()
                     
                 elif event.type==QUIT:
                     running=False
                     self.finish()
             
-            #### Will ensure our game runs at 10 FPS
-            self.clock.tick(SPEED)
+            try :
 
-            self.play()
-            
+                if self.pause:
+                    ### iniciar play
+                    self.play()
+
+                self.time_left(seconds) 
+
+            except Exception as e:
+                self.show_game_over()
+                #pygame.display.flip()
+
             #### This will refresh our screen 
             pygame.display.flip()
+            #### This will delay the game so it doesn't run too quickly
+            self.clock.tick(SPEED)            
             
        
 #### Main process
