@@ -33,7 +33,7 @@ def leer_Boletas(nombre_doc,page_content):
 
     #recorrer los indices y tomar los valores
     while indice < len(numDocuments):
-        rows+=str(1)+'//'+nombre_doc+'//'+str(indice)+'//'+'BOLETAS'+'//'+numDocuments[indice]+'//'+tipoMoneda+'//'+mTotal[indice]+'*'
+        rows+=str(1)+'//'+nombre_doc+'//'+str(indice)+'//'+'BOLETA'+'//'+numDocuments[indice]+'//'+tipoMoneda+'//'+mTotal[indice]+'*'
         indice+=1   
     return rows    
 #leer facturas        
@@ -71,7 +71,7 @@ def leer_Facturas(nombre_doc,page_content):
     newArray=search_t.split('/')
     LasIndex=len(newArray)-2
     Monto=newArray[LasIndex]
-    return str(1)+'//'+nombre_doc+'//'+str(1)+'//'+'FACTURAS'+'//'+str(numFactura)+'//'+tipoMoneda+'//'+str(Monto)+'*'
+    return str(1)+'//'+nombre_doc+'//'+str(1)+'//'+'FACTURA'+'//'+str(numFactura)+'//'+tipoMoneda+'//'+str(Monto)+'*'
 # crear documento html
 def crear_Html(html_content):
     value = -1
