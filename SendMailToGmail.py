@@ -1,21 +1,16 @@
 import os
 import smtplib
 
-<<<<<<< HEAD
-    #working..
-
-    titulo="titulo mensaje"
-    isEnvidado=False
-=======
+titulo="titulo mensaje"
+isEnvidado=False
 db_user='charlydeveloper@gmail.com'
-db_pass=os.environ.get('DB_Karloz')
->>>>>>> a61a3113f57daf5147fdcfb9ae064059b2626cc3
+db_pass=os.getenv('DB_Karloz')
+
 
 with smtplib.SMTP('smtp.gmail.com',587) as smtp:
     smtp.ehlo()
     smtp.starttls()
     smtp.ehlo()
-
     smtp.login(db_user,db_pass)
 
     subject ='grab dinner this week'
